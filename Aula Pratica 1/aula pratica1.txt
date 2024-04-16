@@ -1,0 +1,9 @@
+gcc -E steps.c -o prog.i
+vim prog.i
+
+gcc -S prog.i -o prog.s
+
+as prog.s -o prog.o
+mvin prog.o
+
+
