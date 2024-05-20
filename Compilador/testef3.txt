@@ -1,0 +1,7 @@
+char a = 3+2;
+
+if( char == 5){
+    for (a::teste){
+        print(a);
+    }
+}

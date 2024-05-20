@@ -28,8 +28,6 @@ int yylex(void);
 %token TOK_AND
 %token TOK_OR
 
-
-
 %start program
 
 %%
