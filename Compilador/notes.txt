@@ -1,0 +1,6 @@
+ao declarar variaveis ( global : declaration) o int e float sao transformados em expressao para possibilitar
+incrementos na variavel declaradas
+ex: int a = 10+10;
+
+colocar true e false ou na expr ou em outro lugar...
+ver se precisar colocar break 
