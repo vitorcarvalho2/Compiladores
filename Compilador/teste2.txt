@@ -1,18 +1,12 @@
-char i = a;
-int b = 10;
-if(i==a){
-    if(i>5){
-        print(i);
-    }
-}else{
-    if(i != 5){
-        print(ababa);
-    }
-}
+// teste de for
+int a= 10 + 10;
+int b=1;
 
-
-if(a==b){
-    a= a+b;
-}else if(a>b){
-    b=b+c;
+for(a::b){
+    for(b::a){
+        if(a<b){
+            int a = a+b;
+            b = a+1;
+        }
+    }
 }

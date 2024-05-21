@@ -1,1 +1,6 @@
-int a
+
+int a;
+
+else if{
+    print(aaa);
+}

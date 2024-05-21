@@ -179,9 +179,10 @@ decide_allargs_extra : TOK_AND decide_allargs {
 decide_allargs_extra : TOK_OR decide_allargs{
 }
 
-global : scanner {}
+global : scanner {
+}
 
-scanner : TOK_SCAN '(' TOK_IDENTIFY ')' ';' {
+scanner : tok_id TOK_IDENTIFY '=' TOK_SCAN ';' {
 }
 
 

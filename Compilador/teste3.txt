@@ -1,11 +1,15 @@
-int a= 10 + 10;
-int b=1;
 
-for(a::b){
-    for(b::a){
-        if(a<b){
-            int a = a+b;
-            b = a+1;
-        }
-    }
-}
+//testes de atribuição print e scan
+A = 10 + 10 - 3;
+B = (20.5 +(10.7 * 2)/15);
+C = A +B;
+print (C);
+print("aaaa");
+int idade = scan ;
+int a;
+float a;
+int a=1;
+float b=1.1;
+bool a= true;
+bool b = false;
+char letra = a;
