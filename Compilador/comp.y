@@ -46,6 +46,9 @@ global : TOK_IDENTIFY '=' expr ';'{
 global : TOK_PRINT '(' TOK_IDENTIFY ')' ';'{
 }
 
+global : TOK_PRINT '(' TOK_STRING ')' ';'{
+}
+
 expr : expr '+' term {
 }
 
@@ -176,7 +179,10 @@ decide_allargs_extra : TOK_AND decide_allargs {
 decide_allargs_extra : TOK_OR decide_allargs{
 }
 
+global : scanner {}
 
+scanner : TOK_SCAN '(' TOK_IDENTIFY ')' ';' {
+}
 
 
 %%

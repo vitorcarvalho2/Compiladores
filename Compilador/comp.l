@@ -43,6 +43,10 @@ int yyerror(const char *s);
 ";" { return ';'; }
 "=" { return '='; }
 
+\"[a-zA-Z_' ']+\" {
+	return TOK_STRING;
+}
+
 [a-zA-Z_][a-zA-Z0-9_]* {
 return TOK_IDENTIFY;
 }
@@ -57,10 +61,6 @@ return TOK_INT;
 
 [a-zA-z0-9_] {
 return TOK_CHAR;
-}
-
-[a-zA-z0-9_]+ {
-return TOK_STRING;
 }
 
 
