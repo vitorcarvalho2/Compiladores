@@ -1,0 +1,8 @@
+
+// este é um comentário
+A = 10 + 10 - 3 +C
+B = (20.5 + ((10.7 * 2)) / 15 ;
+C = A + B;
+print C;
+
+// se escrever ./calc -f "nome do arquivo" ele mostrara a arvore 
