@@ -4,3 +4,8 @@ ex: int a = 10+10;
 
 colocar true e false ou na expr ou em outro lugar...
 ver se precisar colocar break 
+
+
+
+o que colocar na linha 53 do .l para aplicar a strings
+

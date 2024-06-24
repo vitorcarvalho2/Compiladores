@@ -1,6 +1,14 @@
+
 %{
 #include <stdio.h>
+#include <stdlib.h>
+
+char *build_file_name;
+bool force_print_tree = false; 
+class Node;
+
 #include "comp.tab.h"
+
 
 int yyerror(const char *s);
 
@@ -18,12 +26,12 @@ int yyerror(const char *s);
 "for" { return TOK_FOR; }
 "if" { return TOK_IF; }
 "else" { return TOK_ELSE; }
-"true" { return TOK_TRUE; }
-"false" { return TOK_FALSE; }
+"real" { return TOK_TRUE; }
+"fake" { return TOK_FALSE; }
 "int" { return TOK_INT_ID;}
 "float" { return TOK_FLOAT_ID; }
 "char" { return TOK_CHAR_ID; }
-"bool" { return TOK_BOOL_ID; }
+"boolean" { return TOK_BOOL_ID; }
 "string" { return TOK_STRING_ID; }
 "==" { return TOK_EQUALS; }
 "!=" { return TOK_DIFFERENT; }
@@ -44,23 +52,28 @@ int yyerror(const char *s);
 "=" { return '='; }
 
 \"[a-zA-Z_' ']+\" {
+	yylval.str = strndup(yytext,yyleng);
 	return TOK_STRING;
 }
 
 [a-zA-Z_][a-zA-Z0-9_]* {
-return TOK_IDENTIFY;
+	yylval.str = strndup(yytext,yyleng);
+	return TOK_IDENT;
 }
 
 [0-9]+\.[0-9]* {
-return TOK_FLOAT;
+	yylval.flt = atof(yytext);
+	return TOK_FLOAT;
 }
 
 [0-9]+ {
-return TOK_INT;
+	yylval.itg = atoi(yytext);
+	return TOK_INT;
 }
 
-[a-zA-z0-9_] {
-return TOK_CHAR;
+'[a-zA-z0-9_]' {
+	yylval.chr = yytext[1];
+	return TOK_CHAR;
 }
 
 
@@ -74,8 +87,12 @@ int yywrap(){
     return 1;
 }
 
+extern int errorcount;
+extern int yydebug;
+
 int yyerror(const char *s){
-    printf("Erro de sintaxe na linha %d: %s\n" ,yylineno, s);
+    printf("%s:%d:0: %s\n",build_file_name, yylineno, s);
+	errorcount++;
     return 1;
 }
 
@@ -85,12 +102,22 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	
-	yyin = fopen(argv[1], "r");
+	int build_file_id=1;
+
+	if(strcmp(argv[1], "-f")==0){
+		force_print_tree = true;
+		build_file_id++;
+	}
+
+	build_file_name = argv[build_file_id];
+
+	yyin = fopen(argv[build_file_id], "r");
 	if(yyin == NULL){
 		printf("Não foi possivel abrir o arquivo %s.\n", argv[1]);
 		return 1;
 	}
 	
+	yydebug =1;
 	yyparse();
 	
 	if(yyin)

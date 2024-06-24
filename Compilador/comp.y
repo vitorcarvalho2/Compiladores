@@ -1,11 +1,25 @@
 %{
+
+#include "nodesC.h"
+
 int yyerror(const char *s);
 int yylex(void);
+int errorcount =0;
+extern int force_print_tree;
 %}
 
 %define parse.error verbose
+%define parse.trace
 
-%token TOK_IDENTIFY
+%union {
+    char chr;
+    char *str;
+    int itg;
+    double flt;
+    Node *node;
+}
+
+%token TOK_IDENT
 %token TOK_PRINT
 %token TOK_FLOAT
 %token TOK_INT
@@ -28,55 +42,103 @@ int yylex(void);
 %token TOK_AND
 %token TOK_OR
 
+%type<str> TOK_IDENT
+%type<itg> TOK_INT
+%type<flt> TOK_FLOAT
+%type<chr> TOK_CHAR
+%type<node> globals global expr term factor unary
+
+%printer { fprintf(yyo, "%s", $$);} <str>
+%printer { fprintf(yyo, "%d", $$);} <itg>
+%printer { fprintf(yyo, "%f", $$);} <flt>
+%printer { fprintf(yyo, "%c", $$);} <chr>
+%printer { fprintf(yyo, "%s", $$-> toDebug().c_str());} <node>
+
 %start program
 
 %%
 
-program : globals ;
+program : globals {
+   Node *program = new Program();
+    program->append($globals);
 
-globals : globals global {
+    // aqui vai a analise semantica
+    CheckVarDecl cvd;
+    cvd.check(program);
+    
+    if(errorcount>0)
+        cout << errorcount << " error(s) found" <<endl;
+    if(force_print_tree || errorcount ==0)
+        printf_tree(program);
+}
+
+globals : globals[gg] global {
+    $gg->append($global);
+    $$ = $gg;
 }
 
 globals : global {   
+    Node *n = new Node();
+    n->append($global);
+    $$ = n;
+
 }
 
-global : TOK_IDENTIFY '=' expr ';'{
+global : TOK_IDENT '=' expr ';'{
+    $$ = new Variable($TOK_IDENT, $expr);
 }
 
-global : TOK_PRINT '(' TOK_IDENTIFY ')' ';'{
+global : TOK_PRINT '(' TOK_IDENT ')' ';'{
+    Ident *id = new Ident($TOK_IDENT);
+    $$ = new Print(id);
+}
+
+global : error ';' { 
+    $$ = new Node(); 
 }
 
 global : TOK_PRINT '(' TOK_STRING ')' ';'{
+
 }
 
-expr : expr '+' term {
+expr : expr[ee] '+' term {
+    $$ = new BinaryOp($ee, $term, '+');
 }
 
-expr : expr '-' term {
+expr : expr[ee] '-' term {
+    $$ = new BinaryOp($ee, $term, '-');
 }
 
 expr : term{
+    $$ = $term;
 }
 
-term : term '*' factor{
+term : term[tt] '*' factor{
+    $$ = new BinaryOp($tt, $factor, '*');
 }
 
-term : term '/' factor{
+term : term[tt] '/' factor{
+    $$ = new BinaryOp($tt, $factor, '/');
 }
 
 term : factor {
+    $$ = $factor;
 }
 
 factor : '(' expr ')' {
+    $$ = $expr;
 }
 
-factor : TOK_IDENTIFY {
+factor : TOK_IDENT[str] {
+    $$ = new Ident($str);
 }
 
-factor : TOK_INT {
+factor : TOK_INT[itg] {
+    $$ = new Integer($itg);
 }
 
-factor : TOK_FLOAT{
+factor : TOK_FLOAT[flt] {
+    $$ = new Float($flt);
 }
 
 factor : TOK_CHAR{
@@ -91,20 +153,22 @@ factor : TOK_TRUE{
 factor : TOK_FALSE{
 }
 
-factor : unary{
+factor : unary[u] {
+    $$ = $u;
 }
 
-unary : '-' factor {
+unary : '-' factor[f] {
+    $$ = new Unary($f, '-');
 }
 
 
 global : declaration {
 }
 
-declaration : tok_id TOK_IDENTIFY  ';' {
+declaration : tok_id TOK_IDENT  ';' {
 }
 
-declaration : tok_id TOK_IDENTIFY '=' expr ';' {
+declaration : tok_id TOK_IDENT '=' expr ';' {
 }
 
 tok_id : TOK_INT_ID {}
@@ -126,7 +190,7 @@ loop : TOK_FOR '(' var TOK_FROM_TO var ')' '{' globals '}' {
 
 var : TOK_INT {}
 
-var : TOK_IDENTIFY {}
+var : TOK_IDENT {}
 
 global : decide {
 }
@@ -158,7 +222,7 @@ decide_compare : '<' {
 decide_compare : '>' {
 }
 
-decide_argument : TOK_IDENTIFY {
+decide_argument : TOK_IDENT {
 }
 
 decide_argument : TOK_INT {
@@ -182,7 +246,7 @@ decide_allargs_extra : TOK_OR decide_allargs{
 global : scanner {
 }
 
-scanner : tok_id TOK_IDENTIFY '=' TOK_SCAN ';' {
+scanner : tok_id TOK_IDENT '=' TOK_SCAN ';' {
 }
 
 

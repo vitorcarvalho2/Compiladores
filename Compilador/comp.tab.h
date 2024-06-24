@@ -39,7 +39,7 @@
 # define YY_YY_COMP_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -54,7 +54,7 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    TOK_IDENTIFY = 258,            /* TOK_IDENTIFY  */
+    TOK_IDENT = 258,               /* TOK_IDENT  */
     TOK_PRINT = 259,               /* TOK_PRINT  */
     TOK_FLOAT = 260,               /* TOK_FLOAT  */
     TOK_INT = 261,                 /* TOK_INT  */
@@ -82,7 +82,20 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 14 "comp.y"
+
+    char chr;
+    char *str;
+    int itg;
+    double flt;
+    Node *node;
+
+#line 96 "comp.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
