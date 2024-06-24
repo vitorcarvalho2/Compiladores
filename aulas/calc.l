@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	int build_file_id =1;
-
+	
 	if(strcmp(argv[1], "-f")==0){
 		force_print_tree = true;
 		build_file_id++;
