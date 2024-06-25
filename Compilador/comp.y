@@ -47,7 +47,8 @@ extern int force_print_tree;
 %type<itg> TOK_INT
 %type<flt> TOK_FLOAT
 %type<chr> TOK_CHAR
-%type<node> globals global expr term factor unary
+%type<node> globals global expr term factor unary declaration
+
 
 %printer { fprintf(yyo, "%s", $$);} <str>
 %printer { fprintf(yyo, "%d", $$);} <itg>
@@ -99,7 +100,8 @@ global : error ';' {
 }
 
 global : TOK_PRINT '(' TOK_STRING ')' ';'{
-
+    String *value = new String($TOK_STRING);
+    $$ = new Print(value);
 }
 
 expr : expr[ee] '+' term {
@@ -142,12 +144,12 @@ factor : TOK_FLOAT[flt] {
     $$ = new Float($flt);
 }
 
-factor : TOK_CHAR{
-    
+factor : TOK_CHAR[chr]{
+    $$ = new Char($chr);
 }
 
-factor : TOK_STRING{
-    
+factor : TOK_STRING[str]{
+   $$ = new String($str);
 }
 
 factor : TOK_TRUE{
@@ -158,8 +160,8 @@ factor : TOK_FALSE{
    
 }
 
-factor : unary[u] {
-    $$ = $u;
+factor : unary {
+    $$ = $unary;
 }
 
 unary : '-' factor[f] {
@@ -168,26 +170,40 @@ unary : '-' factor[f] {
 
 
 global : declaration {
+    $$ = $declaration;
 }
 
 declaration : tok_id TOK_IDENT  ';' {
+
 }
 
 declaration : tok_id TOK_IDENT '=' expr ';' {
+  
 }
 
-tok_id : TOK_INT_ID {}
+tok_id : TOK_INT_ID {
 
-tok_id : TOK_FLOAT_ID {}
+}
 
-tok_id : TOK_CHAR_ID {}
+tok_id : TOK_FLOAT_ID {
 
-tok_id : TOK_BOOL_ID {}
+}
 
-tok_id : TOK_STRING_ID {}
+tok_id : TOK_CHAR_ID {
+
+}
+
+tok_id : TOK_BOOL_ID {
+
+}
+
+tok_id : TOK_STRING_ID {
+
+}
 
 
 global : loop {
+
 }
 
 loop : TOK_FOR '(' var TOK_FROM_TO var ')' '{' globals '}' {

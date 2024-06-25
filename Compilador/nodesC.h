@@ -93,6 +93,42 @@ public:
     }
 };
 
+class String : public Node{
+protected:
+    string value;
+
+public:
+    String(const string v){
+        value = v;
+    }
+
+    const string getValue(){
+        return value;
+    }
+
+    virtual string toStr() override{
+        return value;
+    }
+};
+
+class Char : public Node{
+protected:
+    char value;
+
+public:
+    Char(const char v){
+        value = v;
+    }
+
+    const char getValue(){
+        return value;
+    }
+
+    virtual string toStr() override{
+        return to_string(value);
+    }
+};
+
 class Variable : public Node
 {
 protected:
