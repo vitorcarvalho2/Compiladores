@@ -43,6 +43,7 @@ extern int force_print_tree;
 %token TOK_OR
 
 %type<str> TOK_IDENT
+%type<str> TOK_STRING
 %type<itg> TOK_INT
 %type<flt> TOK_FLOAT
 %type<chr> TOK_CHAR
@@ -142,15 +143,19 @@ factor : TOK_FLOAT[flt] {
 }
 
 factor : TOK_CHAR{
+    
 }
 
 factor : TOK_STRING{
+    
 }
 
 factor : TOK_TRUE{
+  
 }
 
 factor : TOK_FALSE{
+   
 }
 
 factor : unary[u] {

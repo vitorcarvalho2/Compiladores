@@ -108,6 +108,12 @@ int main(int argc, char *argv[]) {
 		force_print_tree = true;
 		build_file_id++;
 	}
+	
+	yydebug = 0;
+	if(strcmp(argv[1], "-d")==0){
+		yydebug = 1;
+		build_file_id++;
+	}
 
 	build_file_name = argv[build_file_id];
 
@@ -117,7 +123,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	
-	yydebug =1;
+	
 	yyparse();
 	
 	if(yyin)
