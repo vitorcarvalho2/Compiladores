@@ -38,6 +38,7 @@ int yyerror(const char *s);
 "::" { return TOK_FROM_TO; }
 "&&" { return TOK_AND; }
 "||" { return TOK_OR; }
+"!" { return '!'; }
 ">" { return '>'; }
 "<" { return '<'; }
 "}" { return '}'; }

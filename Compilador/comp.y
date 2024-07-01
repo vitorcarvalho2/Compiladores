@@ -47,7 +47,7 @@ extern int force_print_tree;
 %type<itg> TOK_INT
 %type<flt> TOK_FLOAT
 %type<chr> TOK_CHAR
-%type<node> globals global expr term factor unary declaration
+%type<node> globals global expr term factor unary declaration var decide expr_log factor_log term_log unary_log
 
 
 %printer { fprintf(yyo, "%s", $$);} <str>
@@ -99,9 +99,33 @@ global : error ';' {
     $$ = new Node(); 
 }
 
+global : decide {
+
+}
+
+global : declaration {
+    $$ = $declaration;
+}
+
+global : loop {
+
+}
+
 global : TOK_PRINT '(' TOK_STRING ')' ';'{
     String *value = new String($TOK_STRING);
     $$ = new Print(value);
+}
+
+decide : TOK_IF '(' expr_log ')' '{' globals '}' {
+
+}
+
+decide : TOK_IF '(' expr_log ')' '{' globals '}' TOK_ELSE '{' globals '}' {
+
+}
+
+decide : TOK_IF '(' expr_log ')' '{' globals '}' TOK_ELSE decide {
+
 }
 
 expr : expr[ee] '+' term {
@@ -168,106 +192,82 @@ unary : '-' factor[f] {
     $$ = new Unary($f, '-');
 }
 
+expr_log : expr_log TOK_OR term_log {
+}
 
-global : declaration {
-    $$ = $declaration;
+expr_log : term_log {
+}
+
+term_log : term_log TOK_AND factor_log {
+
+}
+
+term_log : factor_log {
+}
+
+factor_log : expr '<' expr {
+
+}
+
+factor_log : expr '>' expr {
+
+}
+
+factor_log : expr TOK_DIFFERENT expr {
+
+}
+
+factor_log : expr TOK_EQUALS expr {
+
+}
+
+factor_log : unary_log {
+   
+}
+
+unary_log : '!' factor_log {
+
 }
 
 declaration : tok_id TOK_IDENT  ';' {
 
 }
 
-declaration : tok_id TOK_IDENT '=' expr ';' {
-  
+declaration : tok_id TOK_IDENT '=' expr ';' { 
 }
 
 tok_id : TOK_INT_ID {
-
 }
 
 tok_id : TOK_FLOAT_ID {
-
 }
 
 tok_id : TOK_CHAR_ID {
-
 }
 
 tok_id : TOK_BOOL_ID {
-
 }
 
 tok_id : TOK_STRING_ID {
-
-}
-
-
-global : loop {
-
 }
 
 loop : TOK_FOR '(' var TOK_FROM_TO var ')' '{' globals '}' {
 }
 
-var : TOK_INT {}
-
-var : TOK_IDENT {}
-
-global : decide {
+var : TOK_INT[itg] {
+    $$ = new Integer($itg);
 }
 
-decide : TOK_IF '(' decide_allargs ')' '{' globals '}' {
-}
-
-decide : TOK_IF '(' decide_allargs ')' '{' globals '}' TOK_ELSE '{' globals '}' {
-}
-
-decide : TOK_IF '(' decide_allargs ')' '{' globals '}' TOK_ELSE decide {
-}
-
-decide_allargs : decide_argument decide_compare decide_argument {
-}
-
-decide_allargs : decide_argument decide_compare decide_argument decide_allargs_extra {
-}
-
-decide_compare : TOK_DIFFERENT {
-}
-
-decide_compare : TOK_EQUALS {
-}
-
-decide_compare : '<' {
-}
-
-decide_compare : '>' {
-}
-
-decide_argument : TOK_IDENT {
-}
-
-decide_argument : TOK_INT {
-}
-
-decide_argument : TOK_FALSE {
-}
-
-decide_argument : TOK_TRUE{
-}
-
-decide_argument : TOK_STRING {
-}
-
-decide_allargs_extra : TOK_AND decide_allargs {
-}
-
-decide_allargs_extra : TOK_OR decide_allargs{
+var : TOK_IDENT[str] {
+    $$ = new Ident($str);
 }
 
 global : scanner {
+
 }
 
 scanner : tok_id TOK_IDENT '=' TOK_SCAN ';' {
+
 }
 
 

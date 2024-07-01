@@ -370,8 +370,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 38
-#define YY_END_OF_BUFFER 39
+#define YY_NUM_RULES 39
+#define YY_END_OF_BUFFER 40
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -381,15 +381,15 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[91] =
     {   0,
-        0,    0,   39,   37,    2,    2,   37,   37,   37,   37,
-       28,   29,   26,   24,   25,   27,   35,   37,   30,   21,
-       31,   20,   33,   33,   33,   33,   33,   33,   33,   33,
-       33,   23,   37,   22,   16,   32,    0,   18,    0,    0,
-       34,   35,   17,   15,   33,   33,   33,   33,   33,   33,
-       33,    6,   33,   33,   33,   33,   33,   19,   36,    0,
-        1,   34,   33,   33,   33,   33,   33,    5,   10,   33,
-       33,   33,   33,   33,   12,    7,    9,   33,   33,    8,
-        4,   33,   33,   11,    3,   33,   33,   14,   13,    0
+        0,    0,   40,   38,    2,    2,   20,   38,   38,   38,
+       29,   30,   27,   25,   26,   28,   36,   38,   31,   22,
+       32,   21,   34,   34,   34,   34,   34,   34,   34,   34,
+       34,   24,   38,   23,   16,   33,    0,   18,    0,    0,
+       35,   36,   17,   15,   34,   34,   34,   34,   34,   34,
+       34,    6,   34,   34,   34,   34,   34,   19,   37,    0,
+        1,   35,   34,   34,   34,   34,   34,    5,   10,   34,
+       34,   34,   34,   34,   12,    7,    9,   34,   34,    8,
+        4,   34,   34,   11,    3,   34,   34,   14,   13,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -504,10 +504,11 @@ static const flex_int16_t yy_chk[150] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static const flex_int32_t yy_rule_can_match_eol[39] =
+static const flex_int32_t yy_rule_can_match_eol[40] =
     {   0,
 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,     };
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+        };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -537,8 +538,8 @@ class Node;
 
 int yyerror(const char *s);
 
-#line 541 "lex.yy.c"
 #line 542 "lex.yy.c"
+#line 543 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -757,7 +758,7 @@ YY_DECL
 	{
 #line 19 "comp.l"
 
-#line 761 "lex.yy.c"
+#line 762 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -924,116 +925,121 @@ YY_RULE_SETUP
 case 20:
 YY_RULE_SETUP
 #line 41 "comp.l"
-{ return '>'; }
+{ return '!'; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 42 "comp.l"
-{ return '<'; }
+{ return '>'; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 43 "comp.l"
-{ return '}'; }
+{ return '<'; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 44 "comp.l"
-{ return '{'; }
+{ return '}'; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 45 "comp.l"
-{ return '+'; }
+{ return '{'; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 46 "comp.l"
-{ return '-'; }
+{ return '+'; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 47 "comp.l"
-{ return '*'; }
+{ return '-'; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 48 "comp.l"
-{ return '/'; }
+{ return '*'; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 49 "comp.l"
-{ return '('; }
+{ return '/'; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 50 "comp.l"
-{ return ')'; }
+{ return '('; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 51 "comp.l"
-{ return ';'; }
+{ return ')'; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 52 "comp.l"
-{ return '='; }
+{ return ';'; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 54 "comp.l"
+#line 53 "comp.l"
+{ return '='; }
+	YY_BREAK
+case 33:
+YY_RULE_SETUP
+#line 55 "comp.l"
 {
 	yylval.str = strndup(yytext,yyleng);
 	return TOK_STRING;
 }
 	YY_BREAK
-case 33:
+case 34:
 YY_RULE_SETUP
-#line 59 "comp.l"
+#line 60 "comp.l"
 {
 	yylval.str = strndup(yytext,yyleng);
 	return TOK_IDENT;
 }
 	YY_BREAK
-case 34:
+case 35:
 YY_RULE_SETUP
-#line 64 "comp.l"
+#line 65 "comp.l"
 {
 	yylval.flt = atof(yytext);
 	return TOK_FLOAT;
 }
 	YY_BREAK
-case 35:
+case 36:
 YY_RULE_SETUP
-#line 69 "comp.l"
+#line 70 "comp.l"
 {
 	yylval.itg = atoi(yytext);
 	return TOK_INT;
 }
 	YY_BREAK
-case 36:
+case 37:
 YY_RULE_SETUP
-#line 74 "comp.l"
+#line 75 "comp.l"
 {
 	yylval.chr = yytext[1];
 	return TOK_CHAR;
 }
 	YY_BREAK
-case 37:
+case 38:
 YY_RULE_SETUP
-#line 80 "comp.l"
+#line 81 "comp.l"
 {
 printf("simbolo nao reconhecido %c\n", yytext[0]);
 }
 	YY_BREAK
-case 38:
+case 39:
 YY_RULE_SETUP
-#line 84 "comp.l"
+#line 85 "comp.l"
 ECHO;
 	YY_BREAK
-#line 1037 "lex.yy.c"
+#line 1043 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2050,7 +2056,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 84 "comp.l"
+#line 85 "comp.l"
 
 
 int yywrap(){
