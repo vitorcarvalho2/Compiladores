@@ -129,18 +129,50 @@ public:
     }
 };
 
+//aqui é recebido um inteiro e devolve a tipagem da variavel
+class TypeDec : public Node {
+    protected:
+        int type;
+    
+    public:
+        TypeDec(int t){
+            type = t;
+        }
+    virtual string toStr() override{
+        if(type==0){
+            return "Int ";
+        }
+        if(type==1){
+            return "float ";
+        }
+        if(type==2){
+            return "char ";
+        }
+        if(type==3){
+            return "bool ";
+        }
+        if(type==4){
+            return "string ";
+        }
+        else return "sem tipo ";
+    }
+};
+
 class Variable : public Node
 {
 protected:
+    TypeDec *type;
     string name;
     Node *value;
 
 public:
-    Variable(const string n, Node *v)
+    Variable(TypeDec *t,const string n, Node *v)
     {
+        type = t;
         name = n;
         value = v;
         children.push_back(v);
+        children.push_back(t);
     }
 
     const string getName(){
@@ -149,11 +181,11 @@ public:
 
     virtual string toStr() override
     {
-        return name + "=";
+        return type->toStr() + name + "=";
     }
 
     virtual string toDebug() override{
-        return name + "=" + value->toDebug();
+        return type->toStr() + name + "=" + value->toDebug();
     }
 };
 
@@ -248,6 +280,7 @@ void printf_tree(Node *root){
     printf_tree_recursive(root);
     cout << "}" << endl;
 }
+
 
 class CheckVarDecl {
 private:

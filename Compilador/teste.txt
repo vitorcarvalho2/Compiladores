@@ -1,5 +1,5 @@
 // este é um comentário
  int A = 10 + 10 - 3 ;
- B = (20.5 + (10.7 * 2)) / 15 ;
- C = A + B;
+ float B = (20.5 + (10.7 * 2)) / 15 ;
+ float C = A + B;
 print (C);

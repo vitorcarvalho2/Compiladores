@@ -44,7 +44,7 @@ extern int force_print_tree;
 
 %type<str> TOK_IDENT
 %type<str> TOK_STRING
-%type<itg> TOK_INT
+%type<itg> TOK_INT tok_id
 %type<flt> TOK_FLOAT
 %type<chr> TOK_CHAR
 %type<node> globals global expr term factor unary declaration var decide expr_log factor_log term_log unary_log
@@ -84,10 +84,6 @@ globals : global {
     n->append($global);
     $$ = n;
 
-}
-
-global : TOK_IDENT '=' expr ';'{
-    $$ = new Variable($TOK_IDENT, $expr);
 }
 
 global : TOK_PRINT '(' TOK_IDENT ')' ';'{
@@ -196,6 +192,7 @@ expr_log : expr_log TOK_OR term_log {
 }
 
 expr_log : term_log {
+
 }
 
 term_log : term_log TOK_AND factor_log {
@@ -234,21 +231,27 @@ declaration : tok_id TOK_IDENT  ';' {
 }
 
 declaration : tok_id TOK_IDENT '=' expr ';' { 
+     $$ = new Variable(new TypeDec ($tok_id), $TOK_IDENT, $expr);
 }
 
 tok_id : TOK_INT_ID {
+    $$ = 0;
 }
 
 tok_id : TOK_FLOAT_ID {
+    $$ = 1;
 }
 
 tok_id : TOK_CHAR_ID {
+     $$ = 2;
 }
 
 tok_id : TOK_BOOL_ID {
+    $$ = 3;
 }
 
 tok_id : TOK_STRING_ID {
+    $$ = 4;
 }
 
 loop : TOK_FOR '(' var TOK_FROM_TO var ')' '{' globals '}' {
@@ -272,4 +275,3 @@ scanner : tok_id TOK_IDENT '=' TOK_SCAN ';' {
 
 
 %%
-
