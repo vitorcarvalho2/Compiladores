@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "string_view": "c",
+        "array": "c",
+        "compare": "c",
+        "functional": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "string": "c"
+    }
+}
