@@ -42,13 +42,12 @@ extern int force_print_tree;
 %token TOK_AND
 %token TOK_OR
 
-%type<str> TOK_IDENT
-%type<str> TOK_STRING
-%type<itg> TOK_INT tok_id
+%type<str> TOK_IDENT TOK_STRING TOK_TRUE TOK_FALSE
+%type<itg> TOK_INT tok_id 
 %type<flt> TOK_FLOAT
 %type<chr> TOK_CHAR
-%type<node> globals global expr term factor unary declaration var decide expr_log factor_log term_log unary_log
 
+%type<node> globals global expr term factor unary declaration var decide expr_log factor_log term_log unary_log
 
 %printer { fprintf(yyo, "%s", $$);} <str>
 %printer { fprintf(yyo, "%d", $$);} <itg>
@@ -83,6 +82,10 @@ globals : global {
     Node *n = new Node();
     n->append($global);
     $$ = n;
+
+}
+
+global : TOK_IDENT '=' expr ';'{
 
 }
 
@@ -172,12 +175,12 @@ factor : TOK_STRING[str]{
    $$ = new String($str);
 }
 
-factor : TOK_TRUE{
-  
+factor : TOK_TRUE[str]{
+    $$ = new True($str);
 }
 
-factor : TOK_FALSE{
-   
+factor : TOK_FALSE[str]{
+    $$ = new False($str);
 }
 
 factor : unary {
@@ -226,10 +229,6 @@ unary_log : '!' factor_log {
 
 }
 
-declaration : tok_id TOK_IDENT  ';' {
-
-}
-
 declaration : tok_id TOK_IDENT '=' expr ';' { 
      $$ = new Variable(new TypeDec ($tok_id), $TOK_IDENT, $expr);
 }
@@ -243,7 +242,7 @@ tok_id : TOK_FLOAT_ID {
 }
 
 tok_id : TOK_CHAR_ID {
-     $$ = 2;
+    $$ = 2;
 }
 
 tok_id : TOK_BOOL_ID {
@@ -255,6 +254,7 @@ tok_id : TOK_STRING_ID {
 }
 
 loop : TOK_FOR '(' var TOK_FROM_TO var ')' '{' globals '}' {
+
 }
 
 var : TOK_INT[itg] {
@@ -272,6 +272,5 @@ global : scanner {
 scanner : tok_id TOK_IDENT '=' TOK_SCAN ';' {
 
 }
-
 
 %%

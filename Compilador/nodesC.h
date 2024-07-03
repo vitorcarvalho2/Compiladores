@@ -111,6 +111,44 @@ public:
     }
 };
 
+class True: public Node{
+protected:
+    string value;
+
+public:
+    True(const string v){
+        value = v;
+    }
+
+    const string getValue(){
+       return value;
+    }
+
+    virtual string toStr() override{
+        value = "true";
+        return value;
+    }
+};
+
+class False: public Node{
+protected:
+    string value;
+
+public:
+    False(const string v){
+        value = v;
+    }
+
+    const string getValue(){
+       return value;
+    }
+
+    virtual string toStr() override{
+        value = "false";
+        return value;
+    }
+};
+
 class Char : public Node{
 protected:
     char value;

@@ -11,3 +11,5 @@ o que colocar na linha 53 do .l para aplicar a strings
 
 
 verificar se os valores dentro do for sao ints ou idents
+
+fazer o store e o ...

@@ -26,8 +26,8 @@ int yyerror(const char *s);
 "for" { return TOK_FOR; }
 "if" { return TOK_IF; }
 "else" { return TOK_ELSE; }
-"real" { return TOK_TRUE; }
-"fake" { return TOK_FALSE; }
+"true" { return TOK_TRUE; }
+"false" { return TOK_FALSE; }
 "int" { return TOK_INT_ID;}
 "float" { return TOK_FLOAT_ID; }
 "char" { return TOK_CHAR_ID; }
