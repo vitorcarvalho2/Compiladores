@@ -2,14 +2,18 @@
 string i = "maria";
 boolean n = true;
 float n = 10;
+int a = -1;
+int b = 2;
+int c = 3;
+int d=3;
 
 int j=1;
-if(a < b && c<c){
-    print(ababa);
+if(a < b && !c < d){
+    print(a);
 }
 
 if(a !=b || b == d){
-    
+    a = !a;
     int b = b+1;
 }
 

@@ -42,12 +42,12 @@ extern int force_print_tree;
 %token TOK_AND
 %token TOK_OR
 
-%type<str> TOK_IDENT TOK_STRING TOK_TRUE TOK_FALSE
+%type<str> TOK_IDENT TOK_STRING TOK_TRUE TOK_FALSE TOK_AND TOK_OR TOK_DIFFERENT TOK_EQUALS TOK_SCAN
 %type<itg> TOK_INT tok_id 
 %type<flt> TOK_FLOAT
 %type<chr> TOK_CHAR
 
-%type<node> globals global expr term factor unary declaration var decide expr_log factor_log term_log unary_log
+%type<node> globals global expr term factor unary declaration var decide loop expr_log factor_log term_log unary_log 
 
 %printer { fprintf(yyo, "%s", $$);} <str>
 %printer { fprintf(yyo, "%d", $$);} <itg>
@@ -99,7 +99,7 @@ global : error ';' {
 }
 
 global : decide {
-
+    $$ = $decide;
 }
 
 global : declaration {
@@ -107,7 +107,7 @@ global : declaration {
 }
 
 global : loop {
-
+    $$ = $loop;
 }
 
 global : TOK_PRINT '(' TOK_STRING ')' ';'{
@@ -183,6 +183,11 @@ factor : TOK_FALSE[str]{
     $$ = new False($str);
 }
 
+/* O scan teria um funcionamento diferente mas como não será possivel implementar deixei assim*/
+factor : TOK_SCAN[str]{
+    $$ = new Scan($str);
+}
+
 factor : unary {
     $$ = $unary;
 }
@@ -191,42 +196,44 @@ unary : '-' factor[f] {
     $$ = new Unary($f, '-');
 }
 
-expr_log : expr_log TOK_OR term_log {
+expr_log : expr_log[eel] TOK_OR term_log {
+    $$ = new BinaryOpLog($eel, $term_log, "||");
 }
 
 expr_log : term_log {
-
+    $$ = $term_log;
 }
 
-term_log : term_log TOK_AND factor_log {
-
+term_log : term_log[ttl] TOK_AND factor_log {
+    $$ = new BinaryOpLog($ttl, $factor_log, "&&");
 }
 
 term_log : factor_log {
+    $$ = $factor_log;
 }
 
-factor_log : expr '<' expr {
-
+factor_log : expr[ee1] '<' expr[ee2] {
+   $$ = new BinaryOp($ee1, $ee2, '<');
 }
 
-factor_log : expr '>' expr {
-
+factor_log : expr[ee1] '>' expr[ee2]{
+    $$ = new BinaryOp($ee1, $ee2, '<');
 }
 
-factor_log : expr TOK_DIFFERENT expr {
-
+factor_log : expr[ee1] TOK_DIFFERENT expr[ee2] {
+    $$ = new BinaryOpLog($ee1, $ee2, "!=");
 }
 
-factor_log : expr TOK_EQUALS expr {
-
+factor_log : expr[ee1] TOK_EQUALS expr[ee2] {
+    $$ = new BinaryOpLog($ee1, $ee2, "==");
 }
 
 factor_log : unary_log {
-   
+   $$ = $unary_log;
 }
 
-unary_log : '!' factor_log {
-
+unary_log : '!' factor_log[f] {
+   $$ = new Unary($f, '!');
 }
 
 declaration : tok_id TOK_IDENT '=' expr ';' { 
@@ -263,14 +270,6 @@ var : TOK_INT[itg] {
 
 var : TOK_IDENT[str] {
     $$ = new Ident($str);
-}
-
-global : scanner {
-
-}
-
-scanner : tok_id TOK_IDENT '=' TOK_SCAN ';' {
-
 }
 
 %%

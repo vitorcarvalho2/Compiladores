@@ -149,6 +149,25 @@ public:
     }
 };
 
+class Scan: public Node{
+protected:
+    string value;
+
+public:
+    Scan(const string v){
+        value = v;
+    }
+
+    const string getValue(){
+       return value;
+    }
+
+    virtual string toStr() override{
+        value = "scan";
+        return value;
+    }
+};
+
 class Char : public Node{
 protected:
     char value;
@@ -249,7 +268,7 @@ public:
     }
 
     virtual string toDebug() override{
-    return toStr() + "=" + value->toDebug();
+    return toStr() + value->toDebug();
     }
 };
 
@@ -281,6 +300,32 @@ public:
     }
 };
 
+class BinaryOpLog : public Node
+{
+protected:
+    Node *value1;
+    Node *value2;
+    string operation;
+
+public:
+    BinaryOpLog(Node *v1, Node *v2, string op){
+        value1 = v1;
+        value2 = v2;
+        operation = op;
+        children.push_back(v1);
+        children.push_back(v2);
+
+    }
+
+    virtual string toStr() override{   
+        return value1->toDebug() + operation + value2->toDebug();
+    }
+
+    virtual string toDebug() override{
+    return value1->toDebug() + operation + value2->toDebug();
+    }
+};
+
 class Print : public Node{
 protected:
     Node *value;
@@ -299,7 +344,6 @@ public:
     return toStr() + " " + value->toDebug();
     }
 };
-
 
 void printf_tree_recursive(Node *noh){
     for (Node *c : noh->getChildren()){
@@ -350,4 +394,6 @@ public:
             symbols.insert(var->getName());
         }
     }
+
+
 };
