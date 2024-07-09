@@ -52,7 +52,7 @@ int yyerror(const char *s);
 ";" { return ';'; }
 "=" { return '='; }
 
-\"[a-zA-Z0-9_]*\" {
+'[a-zA-Z0-9_]*' {
 	yylval.str = strndup(yytext,yyleng);
 	return TOK_STRING;
 }

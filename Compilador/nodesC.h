@@ -47,6 +47,34 @@ public:
     }
 };
 
+class TypeDec : public Node {
+    protected:
+        int type;
+    
+    public:
+        TypeDec(int t){
+            type = t;
+        }
+    virtual string toStr() override{
+        if(type==0){
+            return "Int ";
+        }
+        if(type==1){
+            return "float ";
+        }
+        if(type==2){
+            return "char ";
+        }
+        if(type==3){
+            return "bool ";
+        }
+        if(type==4){
+            return "string ";
+        }
+        else return "sem tipo ";
+    }
+};
+
 class Integer : public Node{
 protected:
     int value;
@@ -186,35 +214,6 @@ public:
     }
 };
 
-//aqui é recebido um inteiro e devolve a tipagem da variavel
-class TypeDec : public Node {
-    protected:
-        int type;
-    
-    public:
-        TypeDec(int t){
-            type = t;
-        }
-    virtual string toStr() override{
-        if(type==0){
-            return "Int ";
-        }
-        if(type==1){
-            return "float ";
-        }
-        if(type==2){
-            return "char ";
-        }
-        if(type==3){
-            return "bool ";
-        }
-        if(type==4){
-            return "string ";
-        }
-        else return "sem tipo ";
-    }
-};
-
 class Variable : public Node
 {
 protected:
@@ -228,8 +227,8 @@ public:
         type = t;
         name = n;
         value = v;
-        children.push_back(v);
         children.push_back(t);
+        children.push_back(v);
     }
 
     const string getName(){
@@ -238,11 +237,39 @@ public:
 
     virtual string toStr() override
     {
-        return type->toStr() + name + "=";
+        return  name + "=";
     }
 
     virtual string toDebug() override{
         return type->toStr() + name + "=" + value->toDebug();
+    }
+};
+
+class Attribution : public Node
+{
+protected:
+    string name;
+    Node *value;
+
+public:
+    Attribution(const string n, Node *v)
+    {
+        name = n;
+        value = v;
+        children.push_back(v);
+    }
+
+    const string getName(){
+        return name;
+    }
+
+    virtual string toStr() override
+    {
+        return  name + "=";
+    }
+
+    virtual string toDebug() override{
+        return name + "=" + value->toDebug();
     }
 };
 
@@ -295,8 +322,7 @@ public:
     }
 
     virtual string toDebug() override{
-    return value1->toDebug() + 
-    toStr() + value2->toDebug();
+    return value1->toDebug() + toStr() + value2->toDebug();
     }
 };
 
@@ -318,11 +344,11 @@ public:
     }
 
     virtual string toStr() override{   
-        return value1->toDebug() + operation + value2->toDebug();
+        return operation ;
     }
 
     virtual string toDebug() override{
-    return value1->toDebug() + operation + value2->toDebug();
+    return value1->toDebug() + operation + value2->toDebug(); 
     }
 };
 
@@ -342,6 +368,72 @@ public:
 
     virtual string toDebug() override{
     return toStr() + " " + value->toDebug();
+    }
+};
+
+class Else : public Node{
+    protected:
+    public:
+    Else(){}
+
+    virtual string toStr() override{
+        return "else";
+      
+    }
+
+    virtual string toDebug() override{
+        return toStr();
+    }
+};
+
+class If1 : public Node{
+protected:
+    Node *value;
+    Node *globals;
+
+public:
+    If1(Node *v, Node *g){
+        value = v;
+        globals = g;
+        children.push_back(v);
+        children.push_back(g);
+    }
+
+    virtual string toStr() override{
+        return "if";
+    }
+
+    virtual string toDebug() override{
+    return toStr() + '(' + value->toDebug() +')' +'{'+ globals->toDebug() +'}';
+    }
+};
+
+class If2 : public Node{
+protected:
+    Node *value;
+    Node *globals1;
+    Else *e1;
+    Node *globals2;
+
+public:
+    If2(Node *v, Node *g1,Else *e,Node *g2){
+        value = v;
+        globals1 = g1;
+        e1 = e;
+        globals2 = g2;
+        children.push_back(v);
+        children.push_back(g1);
+        children.push_back(e);
+        children.push_back(g2);
+    }
+
+    virtual string toStr() override{
+        return "if";
+    }
+
+    virtual string toDebug() override{
+    return toStr() + '(' + value->toDebug() +')' + 
+    '{'+ globals1->toDebug() + '}' + e1->toDebug() + '{' + globals2->toDebug() + '}';
     }
 };
 
@@ -388,7 +480,6 @@ public:
                 errorcount++;
             }
         }
-
         Variable *var = dynamic_cast<Variable*>(noh);//outro metodo
         if(var){
             symbols.insert(var->getName());

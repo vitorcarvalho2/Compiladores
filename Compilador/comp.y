@@ -47,7 +47,7 @@ extern int force_print_tree;
 %type<flt> TOK_FLOAT
 %type<chr> TOK_CHAR
 
-%type<node> globals global expr term factor unary declaration var decide loop expr_log factor_log term_log unary_log 
+%type<node> globals global expr term factor unary declaration attribution var decide loop expr_log factor_log term_log unary_log
 
 %printer { fprintf(yyo, "%s", $$);} <str>
 %printer { fprintf(yyo, "%d", $$);} <itg>
@@ -85,8 +85,13 @@ globals : global {
 
 }
 
-global : TOK_IDENT '=' expr ';'{
+declaration : tok_id TOK_IDENT '=' expr ';' {   
+     $$ = new Variable(new TypeDec($tok_id), $TOK_IDENT, $expr);
+}
 
+attribution : TOK_IDENT '=' expr ';'{
+/* isso n passsa pelo variavel decalrada*/
+   $$ = new Attribution($TOK_IDENT,$expr);
 }
 
 global : TOK_PRINT '(' TOK_IDENT ')' ';'{
@@ -106,6 +111,10 @@ global : declaration {
     $$ = $declaration;
 }
 
+global : attribution{
+    $$ = $attribution;
+}
+
 global : loop {
     $$ = $loop;
 }
@@ -116,14 +125,14 @@ global : TOK_PRINT '(' TOK_STRING ')' ';'{
 }
 
 decide : TOK_IF '(' expr_log ')' '{' globals '}' {
-
+    $$ = new If1($expr_log, $globals);
 }
 
-decide : TOK_IF '(' expr_log ')' '{' globals '}' TOK_ELSE '{' globals '}' {
-
+decide : TOK_IF '(' expr_log ')' '{' globals[g1] '}' TOK_ELSE '{' globals[g2] '}' {
+    $$ = new If2($expr_log, $g1, new Else(),$g2);
 }
 
-decide : TOK_IF '(' expr_log ')' '{' globals '}' TOK_ELSE decide {
+loop : TOK_FOR '(' var TOK_FROM_TO var ')' '{' globals '}' {
 
 }
 
@@ -236,10 +245,9 @@ unary_log : '!' factor_log[f] {
    $$ = new Unary($f, '!');
 }
 
-declaration : tok_id TOK_IDENT '=' expr ';' { 
-     $$ = new Variable(new TypeDec ($tok_id), $TOK_IDENT, $expr);
-}
 
+/* aqui é uma lista como os tipos de variaveis representados por números, 
+a lista e chamada na função TypeDec que retorna o tipo para cada número*/
 tok_id : TOK_INT_ID {
     $$ = 0;
 }
@@ -260,9 +268,6 @@ tok_id : TOK_STRING_ID {
     $$ = 4;
 }
 
-loop : TOK_FOR '(' var TOK_FROM_TO var ')' '{' globals '}' {
-
-}
 
 var : TOK_INT[itg] {
     $$ = new Integer($itg);

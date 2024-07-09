@@ -1,1 +1,2 @@
-char a =a;
+int b = 6;
+int C = a;
