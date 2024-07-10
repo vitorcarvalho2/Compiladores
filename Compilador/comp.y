@@ -90,7 +90,6 @@ declaration : tok_id TOK_IDENT '=' expr ';' {
 }
 
 attribution : TOK_IDENT '=' expr ';'{
-/* isso n passsa pelo variavel decalrada*/
    $$ = new Attribution($TOK_IDENT,$expr);
 }
 
@@ -132,8 +131,8 @@ decide : TOK_IF '(' expr_log ')' '{' globals[g1] '}' TOK_ELSE '{' globals[g2] '}
     $$ = new If2($expr_log, $g1, new Else(),$g2);
 }
 
-loop : TOK_FOR '(' var TOK_FROM_TO var ')' '{' globals '}' {
-
+loop : TOK_FOR '(' var[v1] TOK_FROM_TO var[v2] ')' '{' globals '}' {
+    $$ = new For($v1,new From_to(),$v2,$globals);
 }
 
 expr : expr[ee] '+' term {
@@ -226,7 +225,7 @@ factor_log : expr[ee1] '<' expr[ee2] {
 }
 
 factor_log : expr[ee1] '>' expr[ee2]{
-    $$ = new BinaryOp($ee1, $ee2, '<');
+    $$ = new BinaryOp($ee1, $ee2, '>');
 }
 
 factor_log : expr[ee1] TOK_DIFFERENT expr[ee2] {

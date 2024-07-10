@@ -177,6 +177,39 @@ public:
     }
 };
 
+class From_to : public Node{
+    protected:
+    public:
+        From_to(){
+            
+        }
+
+    virtual string toStr() override{
+        return "::";
+    }
+
+    virtual string toDebug() override{
+        return toStr();
+    }
+};
+
+class Else : public Node{
+    protected:
+        
+    public:
+    Else(){
+    }
+
+    virtual string toStr() override{
+        return "else";
+      
+    }
+
+    virtual string toDebug() override{
+        return toStr();
+    }
+};
+
 class Scan: public Node{
 protected:
     string value;
@@ -371,21 +404,6 @@ public:
     }
 };
 
-class Else : public Node{
-    protected:
-    public:
-    Else(){}
-
-    virtual string toStr() override{
-        return "else";
-      
-    }
-
-    virtual string toDebug() override{
-        return toStr();
-    }
-};
-
 class If1 : public Node{
 protected:
     Node *value;
@@ -404,7 +422,7 @@ public:
     }
 
     virtual string toDebug() override{
-    return toStr() + '(' + value->toDebug() +')' +'{'+ globals->toDebug() +'}';
+    return toStr() + '(' + ')';
     }
 };
 
@@ -412,11 +430,11 @@ class If2 : public Node{
 protected:
     Node *value;
     Node *globals1;
-    Else *e1;
+    Node *e1;
     Node *globals2;
 
 public:
-    If2(Node *v, Node *g1,Else *e,Node *g2){
+    If2(Node *v, Node *g1,Node *e,Node *g2){
         value = v;
         globals1 = g1;
         e1 = e;
@@ -432,9 +450,36 @@ public:
     }
 
     virtual string toDebug() override{
-    return toStr() + '(' + value->toDebug() +')' + 
-    '{'+ globals1->toDebug() + '}' + e1->toDebug() + '{' + globals2->toDebug() + '}';
+    return toStr() + '(' +')' + e1->toDebug();
     }
+};
+
+class For : public Node {
+    protected:
+        Node *var1;
+        Node *for_to;
+        Node *var2;
+        Node *global;
+
+    public:
+        For(Node *v1,Node *ft,Node *v2, Node *g){
+            var1 = v1;
+            for_to = ft;
+            var2 = v2;
+            global = g;
+            children.push_back(v1);
+            children.push_back(ft);
+            children.push_back(v2);
+            children.push_back(g);
+        }
+
+    virtual string toStr() override{
+        return "for";
+    }
+    
+    virtual string toDebug() override{
+        return toStr() + '(' + var1->toDebug() + for_to->toDebug() + var2->toDebug() + ')';
+   }
 };
 
 void printf_tree_recursive(Node *noh){
