@@ -42,7 +42,7 @@ extern int force_print_tree;
 %token TOK_AND
 %token TOK_OR
 
-%type<str> TOK_IDENT TOK_STRING TOK_TRUE TOK_FALSE TOK_AND TOK_OR TOK_DIFFERENT TOK_EQUALS TOK_SCAN
+%type<str> TOK_IDENT TOK_STRING TOK_SCAN
 %type<itg> TOK_INT tok_id 
 %type<flt> TOK_FLOAT
 %type<chr> TOK_CHAR
@@ -184,11 +184,11 @@ factor : TOK_STRING[str]{
 }
 
 factor : TOK_TRUE[str]{
-    $$ = new True($str);
+    $$ = new True();
 }
 
 factor : TOK_FALSE[str]{
-    $$ = new False($str);
+    $$ = new False();
 }
 
 /* O scan teria um funcionamento diferente mas como não será possivel implementar deixei assim*/

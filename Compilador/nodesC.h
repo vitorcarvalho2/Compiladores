@@ -141,39 +141,31 @@ public:
 
 class True: public Node{
 protected:
-    string value;
 
 public:
-    True(const string v){
-        value = v;
-    }
-
-    const string getValue(){
-       return value;
-    }
+    True(){}
 
     virtual string toStr() override{
-        value = "true";
-        return value;
+        return "true";
+    }
+
+    virtual string toDebug() override{
+        return toStr();
     }
 };
 
 class False: public Node{
 protected:
-    string value;
 
 public:
-    False(const string v){
-        value = v;
-    }
-
-    const string getValue(){
-       return value;
-    }
+    False(){}
 
     virtual string toStr() override{
-        value = "false";
-        return value;
+        return "false";
+    }
+
+    virtual string toDebug() override{
+        return toStr();
     }
 };
 
