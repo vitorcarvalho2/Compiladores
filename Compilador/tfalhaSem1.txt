@@ -1,0 +1,5 @@
+//o teste mostra que o for n aceita entrada de diferentes tipos no exemplo ident e inteiro.
+int A=1;
+for(A::1){
+    print('falha');
+}

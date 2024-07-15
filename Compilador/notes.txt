@@ -2,14 +2,6 @@ ao declarar variaveis ( global : declaration) o int e float sao transformados em
 incrementos na variavel declaradas
 ex: int a = 10+10;
 
-colocar true e false ou na expr ou em outro lugar...
-ver se precisar colocar break 
-
-
-
-o que colocar na linha 53 do .l para aplicar a strings
-
-
 verificar se os valores dentro do for sao ints ou idents
 
-fazer o store e o ...
+como verificar o no da frente

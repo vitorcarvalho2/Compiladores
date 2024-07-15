@@ -1,0 +1,9 @@
+
+
+// o for n aceita tipos diferentes de valores inteiros
+int A=1;
+char B= 'j';
+
+for(A::B){
+    print('error');
+}

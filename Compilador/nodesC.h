@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <string>
 
 extern int errorcount;
 extern int yylineno;
@@ -55,6 +56,11 @@ class TypeDec : public Node {
         TypeDec(int t){
             type = t;
         }
+
+        int getType(){
+            return type;
+        }
+
     virtual string toStr() override{
         if(type==0){
             return "Int ";
@@ -258,6 +264,10 @@ public:
 
     const string getName(){
         return name;
+    }
+
+    TypeDec* getType(){
+        return type;
     }
 
     virtual string toStr() override
@@ -492,7 +502,7 @@ void printf_tree(Node *root){
     cout << "}" << endl;
 }
 
-
+// verifica se a variavel a ser atribuida ja foi declarada
 class CheckVarDecl {
 private:
     set<string> symbols;
@@ -522,6 +532,91 @@ public:
             symbols.insert(var->getName());
         }
     }
+};
 
+class CheckVarFor {
+private:
+    map<string,Variable*> symbols;
 
+public:
+    CheckVarFor() {}
+
+    void check(Node *noh){
+        for (Node *c : noh->getChildren()){
+            check(c);
+        }
+
+        if(For *f = dynamic_cast<For*>(noh)){
+            //se o type do lugar 0 e 2 do for for diferente de int da o erro
+            auto & filhos = f->getChildren();
+            Ident *f0 = dynamic_cast<Ident*>(filhos[0]);
+            Ident *f2 = dynamic_cast<Ident*>(filhos[2]);
+            Integer *f0i = dynamic_cast<Integer*>(filhos[0]);
+            Integer *f2i = dynamic_cast<Integer*>(filhos[2]);
+            if((f0 != NULL && f2i!= NULL)
+             ||( f0i != NULL && f2 !=NULL)){
+                cout << build_file_name
+                     << ":"
+                     << f->getLineno()
+                     << ":0: semantic error: "
+                     << " For doesnt accept alternated types."
+                     << endl;
+                errorcount++;
+            }
+
+            Variable* f0v = symbols[f0->getName()];
+            Variable* f2v = symbols[f2->getName()];
+            if(f0v==NULL || f2v == NULL){
+                cout << build_file_name
+                     << ":"
+                     << f->getLineno()
+                     << ":0: semantic error: "
+                     << " Variable inside for is  undefined."
+                     << endl;
+                errorcount++;
+            }
+           
+            if(f0v->getType()->getType() != 0 || f2v->getType()->getType() != 0){
+            
+                cout << build_file_name
+                     << ":"
+                     << f->getLineno()
+                     << ":0: semantic error: "
+                     << " Values inside for aren't Integers"
+                     << endl;
+                errorcount++;
+            }
+        }
+
+        Variable *var = dynamic_cast<Variable*>(noh);//outro metodo
+        if(var){
+            symbols[var->getName()]= var;
+        }
+    }
+};
+
+class CheckString {
+private:
+    
+
+public:
+    CheckString() {}
+
+    void check(Node *noh){
+        for (Node *c : noh->getChildren()){
+            check(c);
+        }
+
+        if(String *id = dynamic_cast<String*>(noh)){// cria a variavel id e verifica se o nome dela esta na tabela de simbolos
+            if(id->getValue().size()>30){
+                cout << build_file_name
+                     << ":"
+                     << id->getLineno()
+                     << ":0: semantic error: "
+                     << " String size can not be over 30."
+                     << endl;
+                errorcount++;
+            }
+        }
+    }
 };

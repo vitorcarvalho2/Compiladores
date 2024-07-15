@@ -66,6 +66,10 @@ program : globals {
     // aqui vai a analise semantica
     CheckVarDecl cvd;
     cvd.check(program);
+    CheckVarFor cvf;
+    cvf.check(program);
+    CheckString cst;
+    cst.check(program);
     
     if(errorcount>0)
         cout << errorcount << " error(s) found" <<endl;

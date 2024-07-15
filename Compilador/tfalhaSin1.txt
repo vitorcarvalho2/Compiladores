@@ -1,4 +1,4 @@
-
+// erro sintatico
 int a;
 
 else if{
